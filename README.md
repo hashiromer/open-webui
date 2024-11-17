@@ -206,6 +206,42 @@ If you have any questions, suggestions, or need assistance, please open an issue
   </picture>
 </a>
 
+
+## Development Setup 
+
+### Necessary Requirements
+
+1. Node js (20.10+)
+2. uv package manager
+3. Python (3.11+)
+4. Linux or WSL
+
+
+## Install uv if it does not exist 
+``` bash 
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv sync
+```
+
+
+
+Start a terminal for frontend
+``` bash 
+cp -RPp .env.example .env
+npm install
+npm run dev
+```
+
+
+Start a terminal for backend
+
+```bash 
+cd backend
+conda create --name open-webui python=3.11
+conda activate open-webui
+pip install -r requirements.txt -U
+sh dev.sh
+
 ---
 
 Created by [Timothy Jaeryang Baek](https://github.com/tjbck) - Let's make Open WebUI even more amazing together! 💪

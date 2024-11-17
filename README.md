@@ -236,8 +236,6 @@ npm run dev
 Start a terminal for backend
 
 ```bash 
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv sync
 source .venv/bin/activate
 cd backend 
 sh dev.sh

@@ -236,12 +236,11 @@ npm run dev
 Start a terminal for backend
 
 ```bash 
-cd backend
-conda create --name open-webui python=3.11
-conda activate open-webui
-pip install -r requirements.txt -U
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv sync
+source .venv/bin/activate
+cd backend 
 sh dev.sh
-
 ---
 
 Created by [Timothy Jaeryang Baek](https://github.com/tjbck) - Let's make Open WebUI even more amazing together! 💪

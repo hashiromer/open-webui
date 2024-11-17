@@ -1,0 +1,12 @@
+{
+ "prod":{
+    "frontend":"http://chnageme",
+    "backend":"http://changeme"
+
+
+ },
+ "dev": {
+    "frontend":"http://127.0.0.1:5173",
+    "backend":"http://127.0.0.1:8080"
+ }
+}

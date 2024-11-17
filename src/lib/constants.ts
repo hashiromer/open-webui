@@ -1,5 +1,6 @@
 import { browser, dev } from '$app/environment';
 // import { version } from '../../package.json';
+import settings from '../../setting.json'
 
 export const APP_NAME = 'Open WebUI';
 
@@ -17,7 +18,7 @@ let WEBUI_BASE_URL = '';
 
 if (browser) {
     if (dev) {
-        WEBUI_BASE_URL = `http://localhost:8080`;
+        WEBUI_BASE_URL = settings['dev']['backend']
     }
 }
 

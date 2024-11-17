@@ -4,6 +4,7 @@ import json
 import logging
 import mimetypes
 import os
+from pathlib import Path
 import shutil
 import sys
 import time
@@ -142,6 +143,29 @@ if SAFE_MODE:
 logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["MAIN"])
+
+
+
+def load_settings(file_path):
+    try:
+        # Convert string path to Path object and resolve it
+        json_path = Path(file_path).resolve()
+        
+        # Check if file exists
+        if not json_path.exists():
+            raise FileNotFoundError(f"Settings file not found: {file_path}")
+            
+        # Read and parse JSON file
+        with open(json_path, 'r') as file:
+            settings = json.load(file)
+            
+        return settings
+        
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON format in settings file: {str(e)}")
+    except Exception as e:
+        raise Exception(f"Error loading settings: {str(e)}")
+
 
 
 class SPAStaticFiles(StaticFiles):
@@ -841,9 +865,24 @@ class RedirectMiddleware(BaseHTTPMiddleware):
 app.add_middleware(RedirectMiddleware)
 
 
+frontend_urls=[]
+try:
+    settings = load_settings('../setting.json')
+    
+    # Extract frontend URLs into an array
+    frontend_urls = [
+        settings['prod']['frontend'],
+        settings['dev']['frontend']
+    ]
+    
+    
+except Exception as e:
+    print(f"Error: {e}")
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5174"],
+    allow_origins=frontend_urls,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

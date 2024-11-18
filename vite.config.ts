@@ -1,5 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig,searchForWorkspaceRoot } from 'vite';
+import { defineConfig } from 'vite';
 
 // /** @type {import('vite').Plugin} */
 // const viteServerConfig = {
@@ -27,14 +27,4 @@ export default defineConfig({
 	worker: {
 		format: 'es'
 	},
-	server: {
-		fs: {
-		  allow: [
-			// search up for workspace root
-			searchForWorkspaceRoot(process.cwd()),
-			// your custom rules
-			'setting.json',
-		  ],
-		},
-	  },
 });

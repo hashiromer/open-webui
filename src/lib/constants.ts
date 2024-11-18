@@ -114,3 +114,9 @@ export const SUPPORTED_FILE_EXTENSIONS = [
 	'ppt',
 	'msg'
 ];
+
+
+// Source: https://kit.svelte.dev/docs/modules#$env-static-public
+// This feature, akin to $env/static/private, exclusively incorporates environment variables
+// that are prefixed with config.kit.env.publicPrefix (usually set to PUBLIC_).
+// Consequently, these variables can be securely exposed to client-side code.

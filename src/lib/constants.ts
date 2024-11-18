@@ -3,15 +3,7 @@ import { browser, dev, } from '$app/environment';
 
 export const APP_NAME = 'Open WebUI';
 
-let WEBUI_HOSTNAME = '';
 
-if (browser) {
-    if (dev) {
-        WEBUI_HOSTNAME = `${location.hostname}:5174`;
-    }
-}
-
-export { WEBUI_HOSTNAME };
 
 let WEBUI_BASE_URL = '';
 

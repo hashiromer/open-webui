@@ -146,28 +146,6 @@ log.setLevel(SRC_LOG_LEVELS["MAIN"])
 
 
 
-def load_settings(file_path):
-    try:
-        # Convert string path to Path object and resolve it
-        json_path = Path(file_path).resolve()
-        
-        # Check if file exists
-        if not json_path.exists():
-            raise FileNotFoundError(f"Settings file not found: {file_path}")
-            
-        # Read and parse JSON file
-        with open(json_path, 'r') as file:
-            settings = json.load(file)
-            
-        return settings
-        
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Invalid JSON format in settings file: {str(e)}")
-    except Exception as e:
-        raise Exception(f"Error loading settings: {str(e)}")
-
-
-
 class SPAStaticFiles(StaticFiles):
     async def get_response(self, path: str, scope):
         try:

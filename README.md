@@ -239,6 +239,27 @@ Start a terminal for backend
 source .venv/bin/activate
 cd backend 
 sh dev.sh
+```
 ---
+
+Add environment variables in `.env`file
+
+```
+FRONTEND_PROD_URL=http://127.0.0.1:4173
+FRONTEND_DEV_URL=http://127.0.0.1:5173
+```
+
+Create .env.development add these files
+
+```
+VITE_BACKEND_DEV_URL=http://127.0.0.1:8080
+```
+
+Create .env.production file and add
+
+```
+VITE_BACKEND_PROD_URL=http://127.0.0.1:8080
+```
+
 
 Created by [Timothy Jaeryang Baek](https://github.com/tjbck) - Let's make Open WebUI even more amazing together! 💪

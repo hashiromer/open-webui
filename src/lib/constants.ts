@@ -1,4 +1,4 @@
-import { browser, dev } from '$app/environment';
+import { browser, dev, } from '$app/environment';
 // import { version } from '../../package.json';
 import settings from '../../setting.json'
 
@@ -20,6 +20,11 @@ if (browser) {
     if (dev) {
         WEBUI_BASE_URL = settings['dev']['backend']
     }
+	else{
+		WEBUI_BASE_URL = settings['prod']['backend']
+
+
+	}
 }
 
 export { WEBUI_BASE_URL };

@@ -865,29 +865,24 @@ class RedirectMiddleware(BaseHTTPMiddleware):
 app.add_middleware(RedirectMiddleware)
 
 
-frontend_urls=[]
+frontend_urls = []  # Default empty list
+
 try:
-    settings = load_settings('../setting.json')
-    
-    # Extract frontend URLs into an array
     frontend_urls = [
-        settings['prod']['frontend'],
-        settings['dev']['frontend']
+        os.environ['FRONTEND_PROD_URL'],  # Fetch frontend prod URL
+        os.environ['FRONTEND_DEV_URL']    # Fetch frontend dev URL
     ]
-    
-    
 except Exception as e:
-    print(f"Error: {e}")
+    print(f"Error fetching environment variables: {e}")
 
-
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=frontend_urls,
+    allow_origins=frontend_urls,  # Use URLs fetched from environment
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 app.add_middleware(SecurityHeadersMiddleware)
 
 

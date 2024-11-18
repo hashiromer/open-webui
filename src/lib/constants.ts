@@ -1,6 +1,5 @@
 import { browser, dev, } from '$app/environment';
 // import { version } from '../../package.json';
-import settings from '../../setting.json'
 
 export const APP_NAME = 'Open WebUI';
 
@@ -18,15 +17,11 @@ let WEBUI_BASE_URL = '';
 
 if (browser) {
     if (dev) {
-        WEBUI_BASE_URL = settings['dev']['backend']
+        WEBUI_BASE_URL = import.meta.env.VITE_BACKEND_DEV_URL;  
+    } else {
+        WEBUI_BASE_URL = import.meta.env.VITE_BACKEND_PROD_URL;  
     }
-	else{
-		WEBUI_BASE_URL = settings['prod']['backend']
-
-
-	}
 }
-
 export { WEBUI_BASE_URL };
 
 

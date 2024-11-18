@@ -1,31 +1,41 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 cd "$SCRIPT_DIR" || exit
 
 KEY_FILE=.webui_secret_key
 
-PORT="${PORT:-8080}"
-HOST="${HOST:-0.0.0.0}"
+# Ensure VITE_BACKEND_PROD_URL is set
+if [ -z "$VITE_BACKEND_PROD_URL" ]; then
+  echo "Error: VITE_BACKEND_PROD_URL is not set."
+  exit 1
+fi
+
+HOST="${VITE_BACKEND_PROD_URL#*//}"
+HOST="${HOST%%[:/]*}"
+
+PORT="${VITE_BACKEND_PROD_URL##*:}"
+PORT="${PORT%%/*}"
+
 if test "$WEBUI_SECRET_KEY $WEBUI_JWT_SECRET_KEY" = " "; then
   echo "Loading WEBUI_SECRET_KEY from file, not provided as an environment variable."
 
   if ! [ -e "$KEY_FILE" ]; then
     echo "Generating WEBUI_SECRET_KEY"
     # Generate a random value to use as a WEBUI_SECRET_KEY in case the user didn't provide one.
-    echo $(head -c 12 /dev/random | base64) > "$KEY_FILE"
+    head -c 12 /dev/random | base64 > "$KEY_FILE"
   fi
 
   echo "Loading WEBUI_SECRET_KEY from $KEY_FILE"
   WEBUI_SECRET_KEY=$(cat "$KEY_FILE")
 fi
 
-if [[ "${USE_OLLAMA_DOCKER,,}" == "true" ]]; then
+if [ "${USE_OLLAMA_DOCKER}" = "true" ] || [ "${USE_OLLAMA_DOCKER}" = "TRUE" ]; then
     echo "USE_OLLAMA is set to true, starting ollama serve."
     ollama serve &
 fi
 
-if [[ "${USE_CUDA_DOCKER,,}" == "true" ]]; then
+if [[ "${USE_CUDA_DOCKER}" == "true" ]]; then
   echo "CUDA is enabled, appending LD_LIBRARY_PATH to include torch/cudnn & cublas libraries."
   export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/python3.11/site-packages/torch/lib:/usr/local/lib/python3.11/site-packages/nvidia/cudnn/lib"
 fi
@@ -38,12 +48,12 @@ if [ -n "$SPACE_ID" ]; then
     WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' &
     webui_pid=$!
     echo "Waiting for webui to start..."
-    while ! curl -s http://localhost:8080/health > /dev/null; do
+    while ! curl -s "$VITE_BACKEND_PROD_URL/health" > /dev/null; do
       sleep 1
     done
     echo "Creating admin user..."
     curl \
-      -X POST "http://localhost:8080/api/v1/auths/signup" \
+      -X POST "$VITE_BACKEND_PROD_URL/api/v1/auths/signup" \
       -H "accept: application/json" \
       -H "Content-Type: application/json" \
       -d "{ \"email\": \"${ADMIN_USER_EMAIL}\", \"password\": \"${ADMIN_USER_PASSWORD}\", \"name\": \"Admin\" }"
@@ -53,5 +63,9 @@ if [ -n "$SPACE_ID" ]; then
 
   export WEBUI_URL=${SPACE_HOST}
 fi
+
+
+#Print port and host
+echo "DEBUG:  Starting webui on $HOST:$PORT"
 
 WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*'

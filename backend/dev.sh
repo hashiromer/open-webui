@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Extract host and port from BACKEND_DEV_URL
 HOST="$(echo "$BACKEND_DEV_URL" | awk -F[/:] '{print $4}')"

@@ -5,16 +5,16 @@ cd "$SCRIPT_DIR" || exit
 
 KEY_FILE=.webui_secret_key
 
-# Ensure VITE_BACKEND_PROD_URL is set
-if [ -z "$VITE_BACKEND_PROD_URL" ]; then
-  echo "Error: VITE_BACKEND_PROD_URL is not set."
+# Ensure BACKEND_PROD_URL is set
+if [ -z "$BACKEND_PROD_URL" ]; then
+  echo "Error: BACKEND_PROD_URL is not set."
   exit 1
 fi
 
-HOST="${VITE_BACKEND_PROD_URL#*//}"
+HOST="${BACKEND_PROD_URL#*//}"
 HOST="${HOST%%[:/]*}"
 
-PORT="${VITE_BACKEND_PROD_URL##*:}"
+PORT="${BACKEND_PROD_URL##*:}"
 PORT="${PORT%%/*}"
 
 if test "$WEBUI_SECRET_KEY $WEBUI_JWT_SECRET_KEY" = " "; then
@@ -48,12 +48,12 @@ if [ -n "$SPACE_ID" ]; then
     WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' &
     webui_pid=$!
     echo "Waiting for webui to start..."
-    while ! curl -s "$VITE_BACKEND_PROD_URL/health" > /dev/null; do
+    while ! curl -s "$BACKEND_PROD_URL/health" > /dev/null; do
       sleep 1
     done
     echo "Creating admin user..."
     curl \
-      -X POST "$VITE_BACKEND_PROD_URL/api/v1/auths/signup" \
+      -X POST "$BACKEND_PROD_URL/api/v1/auths/signup" \
       -H "accept: application/json" \
       -H "Content-Type: application/json" \
       -d "{ \"email\": \"${ADMIN_USER_EMAIL}\", \"password\": \"${ADMIN_USER_PASSWORD}\", \"name\": \"Admin\" }"

@@ -9,9 +9,9 @@ let WEBUI_BASE_URL = '';
 
 if (browser) {
     if (dev) {
-        WEBUI_BASE_URL = import.meta.env.VITE_BACKEND_DEV_URL;  
+        WEBUI_BASE_URL = BACKEND_DEV_URL;  
     } else {
-        WEBUI_BASE_URL = import.meta.env.VITE_BACKEND_PROD_URL;  
+        WEBUI_BASE_URL = BACKEND_PROD_URL;  
     }
 }
 export { WEBUI_BASE_URL };

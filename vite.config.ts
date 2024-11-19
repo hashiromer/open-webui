@@ -20,19 +20,17 @@ export default defineConfig(({ mode }) => {
 	const frontendUrl: string =
 		mode === 'production' ? process.env.FRONTEND_PROD_URL  : process.env.FRONTEND_DEV_URL 
 	
-	console.log(`Frontend URL: ${process.env.FRONTEND_DEV_URL}`);
-
-	// Parse the URL to extract host and port
 	const url = new URL(frontendUrl);
 	const host: string = url.hostname;
 	const port: number = parseInt(url.port, 10) 
-	console.log(`Frontend URL: ${frontendUrl}, host: ${host}, port: ${port}`);
 
 	return {
 		plugins: [sveltekit()],
 		define: {
 			APP_VERSION: JSON.stringify(process.env.npm_package_version),
-			APP_BUILD_HASH: JSON.stringify(process.env.APP_BUILD_HASH || 'dev-build')
+			APP_BUILD_HASH: JSON.stringify(process.env.APP_BUILD_HASH || 'dev-build'),
+			BACKEND_PROD_URL: JSON.stringify(process.env.BACKEND_PROD_URL),
+			BACKEND_DEV_URL: JSON.stringify(process.env.BACKEND_DEV_URL),
 		},
 		build: {
 			sourcemap: true

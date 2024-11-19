@@ -307,3 +307,11 @@ dist
 cypress/videos
 cypress/screenshots
 .vscode/settings.json
+
+
+!.idea/misc.xml
+!.idea/*.iml
+!.idea/modules.xml
+!.idea/vcs.xml
+!.idea/runConfigurations/
+!.idea/workspace.xml

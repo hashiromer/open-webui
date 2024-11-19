@@ -27,6 +27,12 @@ ARG BUILD_HASH
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+
+ENV FRONTEND_PROD_URL=http://0.0.0.0:8080
+ENV FRONTEND_DEV_URL=http://0.0.0.0:8080
+ENV BACKEND_PROD_URL=http://0.0.0.0:8080
+ENV BACKEND_DEV_URL=http://0.0.0.0:8080
+
 RUN npm ci
 
 COPY . .

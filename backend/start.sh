@@ -11,6 +11,12 @@ if [ -z "$BACKEND_PROD_URL" ]; then
   exit 1
 fi
 
+#Make sure FRONTEND_PROD_URL is set
+if [ -z "$FRONTEND_PROD_URL" ]; then
+  echo "Error: FRONTEND_PROD_URL is not set."
+  exit 1
+fi
+
 HOST="${BACKEND_PROD_URL#*//}"
 HOST="${HOST%%[:/]*}"
 
@@ -66,6 +72,5 @@ fi
 
 
 #Print port and host
-echo "DEBUG:  Starting webui on $HOST:$PORT"
 
 WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*'

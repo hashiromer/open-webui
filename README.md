@@ -206,7 +206,6 @@ If you have any questions, suggestions, or need assistance, please open an issue
   </picture>
 </a>
 
-
 ## Development Setup 
 
 ### Necessary Requirements
@@ -240,6 +239,41 @@ source .venv/bin/activate
 cd backend 
 sh dev.sh
 ```
+
+
+## Docker Image
+
+### Building image
+
+```bash 
+docker build \
+  --build-arg USE_CUDA=false \
+  --build-arg USE_OLLAMA=false \
+  --build-arg USE_CUDA_VER=cu117 \
+  --build-arg USE_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2 \
+  --build-arg USE_RERANKING_MODEL="" \
+  --build-arg UID=1000 \
+  --build-arg GID=1000 \
+  -t open-webui:latest /workspaces/open-webui
+
+```
+
+## Run the Docker container
+
+### Running Image
+
+```bash
+# Run the Docker container
+docker run -d \
+  -p 8080:8080 \
+  --name open-webui \
+  -e BACKEND_PROD_URL=http://localhost:8080 \
+  -e FRONTEND_PROD_URL=http://localhost:3000 \
+  -e ADMIN_USER_EMAIL=admin@example.com \
+  -e ADMIN_USER_PASSWORD=securepassword \
+  -e SPACE_HOST=your.space.host \
+  open-webui:latest
+  ```
 ---
 
 
